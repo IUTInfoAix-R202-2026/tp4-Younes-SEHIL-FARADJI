@@ -1,6 +1,7 @@
 package fr.univ_amu.iut.exercice6;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.name.Names;
 
 /**
  * Module Guice de l'exercice 6.
@@ -18,9 +19,12 @@ public class Exercice6Module extends AbstractModule {
   protected void configure() {
     // TODO exercice 6 : lier chaque implémentation de Notifieur à un nom.
     //
-    // - le nom "console"    -> NotifieurConsole
+    // - le nom "console" -> NotifieurConsole
     // - le nom "silencieux" -> NotifieurSilencieux
     // Astuce :
     // bind(Notifieur.class).annotatedWith(Names.named("console")).to(NotifieurConsole.class);
+    bind(Notifieur.class).annotatedWith(Names.named("console")).to(NotifieurConsole.class);
+
+    bind(Notifieur.class).annotatedWith(Names.named("silencieux")).to(NotifieurSilencieux.class);
   }
 }
