@@ -1,6 +1,7 @@
 package fr.univ_amu.iut.exercice5;
 
 import com.google.inject.Inject;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -34,22 +35,36 @@ public class PokemonController {
     // TODO exercice 5 : brancher le tableau et le formulaire sur le ViewModel.
     //
     // 1. Dire à chaque colonne quoi afficher (cell value factory) :
-    //      colNumero.setCellValueFactory(
-    //          c -> new SimpleStringProperty(String.valueOf(c.getValue().numero())));
-    //      colNom.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().nom()));
-    //      colType.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().type()));
+    // colNumero.setCellValueFactory(
+    // c -> new SimpleStringProperty(String.valueOf(c.getValue().numero())));
+    // colNom.setCellValueFactory(c -> new
+    // SimpleStringProperty(c.getValue().nom()));
+    // colType.setCellValueFactory(c -> new
+    // SimpleStringProperty(c.getValue().type()));
     // 2. Abonner la TableView à la liste observable :
-    //      table.setItems(viewModel.pokemonsProperty());
+    // table.setItems(viewModel.pokemonsProperty());
     // 3. Lier le label résumé : labelResume <- resumeProperty().
     // 4. Câbler le formulaire :
-    //      - champRecherche <-> rechercheProperty() (bidirectionnel) ;
-    //      - labelStatut    <-  statutProperty() (sens unique) ;
-    //      - boutonAjouter désactivé tant que la recherche est vide
-    //        (disableProperty().bind(rechercheProperty().isEmpty())).
+    // - champRecherche <-> rechercheProperty() (bidirectionnel) ;
+    // - labelStatut <- statutProperty() (sens unique) ;
+    // - boutonAjouter désactivé tant que la recherche est vide
+    // (disableProperty().bind(rechercheProperty().isEmpty())).
+    colNumero.setCellValueFactory(
+        c -> new SimpleStringProperty(String.valueOf(c.getValue().numero())));
+    colNom.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().nom()));
+    colType.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().type()));
+
+    table.setItems(viewModel.pokemonsProperty());
+
+    labelResume.textProperty().bind(viewModel.resumeProperty());
+
+    champRecherche.textProperty().bindBidirectional(viewModel.rechercheProperty());
+    labelStatut.textProperty().bind(viewModel.statutProperty());
+    boutonAjouter.disableProperty().bind(viewModel.rechercheProperty().isEmpty());
   }
 
   @FXML
   private void surAjouter() {
-    // TODO exercice 5 : déclencher la commande d'ajout du ViewModel.
+    viewModel.ajouter();
   }
 }
