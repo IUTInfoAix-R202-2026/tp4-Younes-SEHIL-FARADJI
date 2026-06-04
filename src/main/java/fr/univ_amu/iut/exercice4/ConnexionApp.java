@@ -1,8 +1,11 @@
 package fr.univ_amu.iut.exercice4;
 
+import com.google.inject.Guice;
 import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
@@ -24,13 +27,24 @@ public class ConnexionApp extends Application {
     // brancher FXMLLoader dessus, charger la vue et l'afficher.
     //
     // 1. Injector injector = Guice.createInjector(new AppModule());
-    // 2. FXMLLoader loader = new FXMLLoader(getClass().getResource("ConnexionView.fxml"));
+    // 2. FXMLLoader loader = new
+    // FXMLLoader(getClass().getResource("ConnexionView.fxml"));
     // 3. loader.setControllerFactory(injector::getInstance);
-    //    -> tous les contrôleurs FXML seront instanciés par Guice et
-    //       recevront leurs @Inject.
+    // -> tous les contrôleurs FXML seront instanciés par Guice et
+    // recevront leurs @Inject.
     // 4. Parent racine = loader.load();
-    //    stage.setScene(new Scene(racine));
-    //    stage.show();
+    // stage.setScene(new Scene(racine));
+    // stage.show();
+    Injector injector = Guice.createInjector(new AppModule());
+
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("ConnexionView.fxml"));
+
+    loader.setControllerFactory(injector::getInstance);
+
+    Parent racine = loader.load();
+    stage.setScene(new Scene(racine, 420, 240));
+    stage.setTitle("VigieChiro PR Companion - Connexion (Guice)");
+    stage.show();
   }
 
   public static void main(String[] args) {
