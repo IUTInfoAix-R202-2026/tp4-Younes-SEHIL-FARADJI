@@ -1,5 +1,6 @@
 package fr.univ_amu.iut.exercice3;
 
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -36,7 +37,10 @@ public class FormulaireConnexionViewModel {
     // TODO exercice 3 : rendre le formulaire "validable" uniquement quand
     // l'identifiant ET le mot de passe sont non vides.
     //
-    // Astuce : validable.bind(identifiant.isNotEmpty().and(motDePasse.isNotEmpty()));
+    // Astuce :
+    // validable.bind(identifiant.isNotEmpty().and(motDePasse.isNotEmpty()));
+    BooleanBinding loginValide = identifiant.isNotEmpty().and(motDePasse.isNotEmpty());
+    validable.bind(loginValide);
   }
 
   public StringProperty identifiantProperty() {
@@ -65,7 +69,22 @@ public class FormulaireConnexionViewModel {
     // 1. Publier "Connexion en cours..." dans statut.
     // 2. Demander au serviceAuth de connecter identifiant + motDePasse.
     // 3. Selon le résultat, publier un message clair dans statut :
-    //    - succès : "Bienvenue " + identifiant + " !"
-    //    - échec  : "Identifiants incorrects. Vérifiez votre saisie."
+    // - succès : "Bienvenue " + identifiant + " !"
+    // - échec : "Identifiants incorrects. Vérifiez votre saisie."
+    try {
+      statut.set("Connexion en cours...");
+      String id = identifiant.get();
+      String mdp = motDePasse.get();
+      boolean estConnecte = serviceAuth.connecter(id, mdp);
+
+      if (estConnecte) {
+        statut.set("Bienvenue " + id + " !");
+      } else {
+        statut.set("Identifiants incorrects. Vérifiez votre saisie.");
+      }
+    } catch (Exception e) {
+
+      statut.set("Une erreur technique est survenue. Veuillez réessayer.");
+    }
   }
 }
